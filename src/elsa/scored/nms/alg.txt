@@ -1,0 +1,17 @@
+Algorithm 1: NMS-AP Metrics
+
+Input: preds: predictions
+Input: GT: ground-truth
+1: pickedPreds = keepPreds = []
+2: for k in GT do
+3:   for p in preds do
+4:     if IoU(p, k) > 0.5 then
+5:       pickedPreds = pickedPreds ∪ p
+6:     else
+7:       keepPreds = keepPreds ∪ p
+8:     end if
+9:   end for
+10:  keepPreds = keepPreds ∪ C-NMS(pickedPreds)
+11: end for
+12: mAP = AP(keepPreds, GT)
+13: return mAP

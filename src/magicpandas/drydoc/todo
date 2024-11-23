@@ -1,0 +1,15 @@
+DryDocs: DRY Documentation; define a doc somewhere and then script automatically writes to files
+I added to my TODO another feature in the same spirit as the DryDocs.
+With DryDoc, we have one single file where the documentation for many methods spread throughout the project can be found,
+and magicpandas will automatically update the documentations to the implementations. Similarly, we have various
+configuration properties spread throughout all the classes within the project. We can have a script that aggregates
+these properties into one single JSON file, which can be logged, or modified and automatically distributed back
+to the implementations.
+
+magicpandas config --push ...
+magicpandas config --pull ...
+
+
+
+
+# todo: during drydocs, include a preview of the dataframe

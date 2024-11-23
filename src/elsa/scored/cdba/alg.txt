@@ -1,0 +1,77 @@
+Algorithm 1: Confidence-based Dynamic Box Aggregation (CDBA)
+
+1:  Input: Overlapping bboxes O, GT, IoU threshold iou_thr, Score threshold score_thr
+2:  Output: TP and FP for overlapping bboxes
+3:  Init dicts for TP, FP
+4:  for each grp o ∈ O do
+5:      Compute score range R = max(Scores) − min(Scores)
+6:      if R > score_thr then
+7:          Select bboxes bi where Score(bi) ≥ max(Scores) − score_thr
+8:      else
+9:          Select all bboxes in grp
+10:     end if
+11:     if pred prompts are disjoint then
+12:         for each bbox bi in selected bboxes do
+13:             Add bi to FP list for its class
+14:         end for
+15:     else
+16:         for each selected bbox bi do
+17:             if IoU(bi, g) ≥ iou_thr and label(bi) ⊆ label(g) for any g ∈ GT then
+18:                 Classify as MATCH
+19:                 Add bi to TP list for its class
+20:             else
+21:                 Classify as MISS
+22:                 Add bi to FP list for its class
+23:             end if
+24:         end for
+25:     end if
+26: end for
+27: return TP, FP dicts
+
+
+Algorithm 2: CBDA Integrated Evaluation
+
+1:  Input: Non-overlapping bboxes N, GT, TP and FP from CDBA, IoU threshold iou_thr
+2:  Output: AP and F1 score
+3:  Init dicts for FN
+4:  Init dict for matched GT matchedGT
+5:  for each n ∈ N do
+6:      if IoU(n, g) ≥ iou_thr and label(n) ⊆ label(g) for any g ∈ GT then
+7:          Add n to TP, update matchedGT
+8:      else
+9:          Add n to FP
+10:     end if
+11: end for
+12: for each g ∈ GT not in matchedGT do
+13:     Add g to FN
+14: end for
+15: Compute precision and recall at each thresh
+16: Compute AP and F1 score
+17: return AP, F1 score
+
+
+1:  Input: Overlapping bboxes O, GT, IoU threshold iou_thr, Score threshold score_thr
+2:  Output: TP for overlapping bboxes
+3:  Init array TP
+4:  for each grp o ∈ O do
+5:      Compute score range R = max(Scores) − min(Scores)
+6:      if R > score_thr then
+7:          Select bboxes bi where Score(bi) ≥ max(Scores) − score_thr
+8:      else
+9:          Select all bboxes in grp
+10:     end if
+16:     for each selected bbox bi do
+17:         if IoU(bi, g) ≥ iou_thr and label(bi) ⊆ label(g) for any g ∈ GT then
+18:             Classify as MATCH
+19:             Set TP[i] = 1
+23:         end if
+11:     if pred prompts are disjoint then
+12:         for each bbox bi in selected bboxes do
+13:             Set TP[i] = 0
+14:         end for
+15:     else
+24:         end for
+25:     end if
+26: end for
+27: return TP array
+
